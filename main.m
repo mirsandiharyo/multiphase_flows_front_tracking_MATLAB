@@ -11,9 +11,10 @@ domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'x',{},'y',{}, ...
     'gravx',{},'gravy',{});
 param  = struct('nsteps',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
 fluid  = struct('rho',{},'mu',{},'surf',{});
-bubble = struct('rad',{},'x',{},'y',{});
+bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
+    'x_old',{},'y_old',{},'u',{},'v',{},'tan_x',{},'tan_y',{});
 
-[domain,param,fluid,bubble]=read_input();
+[domain,param,fluid,bubble] = read_input();
 
 %% initialize variables (liquid is at rest in the beginning)
 % horizontal velocities
@@ -21,7 +22,8 @@ bubble = struct('rad',{},'x',{},'y',{});
 % vertical velocities
 [v, v_temp, v_old] = deal(zeros(domain.nx+2, domain.ny+1));
 % pressure, force and temporary variables
-[pres, force_x, force_y, temp1, temp2] = deal(zeros(domain.nx+2, domain.ny+2));
+[pres, force_x, force_y, temp1, temp2] = ...
+    deal(zeros(domain.nx+2, domain.ny+2));
 % center velocities (for plotting)
 [u_ctr, v_ctr] = deal(zeros(domain.nx+1, domain.ny+1));
 
@@ -32,10 +34,11 @@ domain.y = linspace(-0.5, domain.ny+2-1.5, domain.ny+2)* ...
     (domain.ly/domain.ny);
 
 %% initialize the physical properties
-[rho, rho_old, mu, mu_old]= ...
+[rho, rho_old, mu, mu_old] = ...
     initialize_physical_properties(domain, fluid, bubble);
 
 %% set the front (gas-liquid interface)
+[bubble] = initialize_front(bubble);
 
 %% start time-loop
 

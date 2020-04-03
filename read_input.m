@@ -1,5 +1,5 @@
 % read simulation parameters from input.txt 
-function [domain,param,fluid,bubble]=read_input()
+function [domain,param,fluid,bubble] = read_input()
     disp('read input file');
     fid = fopen('input.txt');
     % solver parameters
@@ -53,8 +53,10 @@ function [domain,param,fluid,bubble]=read_input()
     read_line = regexp(fgetl(fid), '=', 'split');
     bubble(1).rad = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).x = str2double(read_line{2});
+    bubble(1).cent_x = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).y = str2double(read_line{2});
+    bubble(1).cent_y = str2double(read_line{2});
+    read_line = regexp(fgetl(fid), '=', 'split');
+    bubble(1).pnt = str2double(read_line{2});    
     fclose(fid);
 end
