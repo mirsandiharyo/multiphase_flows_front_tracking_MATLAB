@@ -4,8 +4,15 @@
 % advected by a front-tracking scheme. The code can be used to simulate a 
 % bubble rising in a rectangular box.
 % Created by: Haryo Mirsandi
+clear all;
 
 %% read input file
+domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'gravx',{},'gravy',{});
+param  = struct('nsteps',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
+fluid  = struct('rho',{},'mu',{},'surf',{});
+bubble = struct('rad',{},'x',{},'y',{});
+
+[domain,param,fluid,bubble]=read_input();
 
 %% initialize variables
 
@@ -43,3 +50,5 @@
 % plot the results
 
 %% end time-loop
+
+disp('program finished');
