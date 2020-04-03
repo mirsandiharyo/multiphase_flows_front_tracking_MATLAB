@@ -6,66 +6,66 @@
 % Created by: Haryo Mirsandi
 clear all;
 
-%% read input file
-domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'x',{},'y',{}, ...
-    'gravx',{},'gravy',{});
+%% define variables
 param  = struct('nsteps',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
-fluid  = struct('rho',{},'mu',{},'surf',{});
+domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'gravx',{},'gravy',{});
+fluid_prop  = struct('rho',{},'mu',{},'surf',{});
 bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
     'x_old',{},'y_old',{},'u',{},'v',{},'tan_x',{},'tan_y',{});
+face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
+    'u_temp',{},'v_temp',{});
+center = struct('press',{},'force_x',{},'force_y',{},'u',{},'v',{}, ...
+    'temp1',{},'temp2',{});
+fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
-[domain,param,fluid,bubble] = read_input();
+%% read input file
+[domain,param,fluid_prop,bubble] = read_input();
 
-%% initialize variables (liquid is at rest in the beginning)
-% horizontal velocities
-[u, u_temp, u_old] = deal(zeros(domain.nx+1, domain.ny+2));
-% vertical velocities
-[v, v_temp, v_old] = deal(zeros(domain.nx+2, domain.ny+1));
-% pressure, force and temporary variables
-[pres, force_x, force_y, temp1, temp2] = ...
-    deal(zeros(domain.nx+2, domain.ny+2));
-% center velocities (for plotting)
-[u_ctr, v_ctr] = deal(zeros(domain.nx+1, domain.ny+1));
-
-%% set the grid (staggered)
-domain.x = linspace(-0.5, domain.nx+2-1.5, domain.nx+2)* ...
-    (domain.lx/domain.nx);
-domain.y = linspace(-0.5, domain.ny+2-1.5, domain.ny+2)* ...
-    (domain.ly/domain.ny);
+%% initialize variables (liquid is at rest at the beginning)
+[face, center] = initialize_variables(domain);
 
 %% initialize the physical properties
-[rho, rho_old, mu, mu_old] = ...
-    initialize_physical_properties(domain, fluid, bubble);
+[fluid] = initialize_physical_properties(domain, face, fluid_prop, bubble);
 
 %% set the front (gas-liquid interface)
 [bubble] = initialize_front(bubble);
 
 %% start time-loop
+for is=1:nstep,is
+%     % store second order variables
+%     [bubble] = store_old_variables(bubble);
+%     u_old = u;
+%     v_old = u;
+%     rho_old = rho;
+%     mu_old = mu;
+%     bubble.x_old = bubble.x;
+%     bubble.y_old = bubble.y;
+    for substep=1:2  % second order loop
+        % calculate the surface tension force at the front (lagrangian grid)
 
-% calculate the surface tension force at the front (lagrangian grid)
+        % distribute the surface tension force from lagrangian
+        % to eulerian grid
 
-% distribute the surface tension force from lagrangian to eulerian grid
+        % update the tangential velocity at boundaries
 
-% update the tangential velocity at boundaries
+        % calculate the (temporary) velocities
 
-% calculate the (temporary) velocities
+        % calculate source term and the coefficient for pressure field
 
-% calculate source term and the coefficient for pressure field
+        % solve pressure
 
-% solve pressure
+        % update velocities to satisfy continuity equation
 
-% update velocities to satisfy continuity equation
- 
-% update the front location
+        % update the front location
 
-% distribute interfacial gradient
+        % distribute interfacial gradient
 
-% update physical properties
-
+        % update physical properties
+  end
 % reconstruct the interface
 
 % plot the results
 
 %% end time-loop
-
+end
 disp('program finished');

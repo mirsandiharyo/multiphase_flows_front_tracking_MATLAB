@@ -1,5 +1,5 @@
 % read simulation parameters from input.txt 
-function [domain,param,fluid,bubble] = read_input()
+function [domain,param,fluid_prop,bubble] = read_input()
     disp('read input file');
     fid = fopen('input.txt');
     % solver parameters
@@ -35,18 +35,18 @@ function [domain,param,fluid,bubble] = read_input()
     read_line = fgetl(fid);
     read_line = fgetl(fid);    
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid(1).rho = str2double(read_line{2});
+    fluid_prop(1).rho = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid(1).mu = str2double(read_line{2});
+    fluid_prop(1).mu = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid(1).surf = str2double(read_line{2});
+    fluid_prop(1).surf = str2double(read_line{2});
     % continuous phase
     read_line = fgetl(fid);
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid(2).rho = str2double(read_line{2});
+    fluid_prop(2).rho = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid(2).mu = str2double(read_line{2});
-    fluid(2).surf = fluid(1).surf;
+    fluid_prop(2).mu = str2double(read_line{2});
+    fluid_prop(2).surf = fluid_prop(1).surf;
     read_line = fgetl(fid);
     % bubble size and location
     read_line = fgetl(fid);    
