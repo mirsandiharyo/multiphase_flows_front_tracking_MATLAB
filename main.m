@@ -7,7 +7,8 @@
 clear all;
 
 %% read input file
-domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'gravx',{},'gravy',{});
+domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'x',{},'y',{}, ...
+    'gravx',{},'gravy',{});
 param  = struct('nsteps',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
 fluid  = struct('rho',{},'mu',{},'surf',{});
 bubble = struct('rad',{},'x',{},'y',{});
@@ -25,12 +26,16 @@ bubble = struct('rad',{},'x',{},'y',{});
 [u_ctr, v_ctr] = deal(zeros(domain.nx+1, domain.ny+1));
 
 %% set the grid (staggered)
-grid_x = linspace(-0.5,domain.nx+2-1.5,domain.nx+2)*(domain.lx/domain.nx);
-grid_y = linspace(-0.5,domain.ny+2-1.5,domain.ny+2)*(domain.ly/domain.ny);
+domain.x = linspace(-0.5, domain.nx+2-1.5, domain.nx+2)* ...
+    (domain.lx/domain.nx);
+domain.y = linspace(-0.5, domain.ny+2-1.5, domain.ny+2)* ...
+    (domain.ly/domain.ny);
+
+%% initialize the physical properties
+[rho, rho_old, mu, mu_old]= ...
+    initialize_physical_properties(domain, fluid, bubble);
 
 %% set the front (gas-liquid interface)
-
-%% set the physical properties
 
 %% start time-loop
 
