@@ -43,7 +43,8 @@ for nstep=1:param.nstep,nstep
         [center] = calculate_surface_tension(domain, bubble, fluid_prop);
 
         % update the tangential velocity at boundaries
-
+        [face] = update_wall_velocities(domain,face);
+        
         % calculate the (temporary) velocities
 
         % calculate source term and the coefficient for pressure field
