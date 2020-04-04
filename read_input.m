@@ -5,7 +5,7 @@ function [domain,param,fluid_prop,bubble] = read_input()
     % solver parameters
     read_line = fgetl(fid); %#ok<*NASGU>
     read_line = regexp(fgetl(fid), '=', 'split');
-    param(1).nsteps = str2double(read_line{2});
+    param(1).nstep = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
     param(1).dt = str2double(read_line{2}); 
     read_line = regexp(fgetl(fid), '=', 'split');
@@ -29,6 +29,8 @@ function [domain,param,fluid_prop,bubble] = read_input()
     domain(1).gravx = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
     domain(1).gravy = str2double(read_line{2});
+    domain(1).dx = domain(1).lx/domain(1).nx;
+    domain(1).dy = domain(1).ly/domain(1).ny;    
     read_line = fgetl(fid);
     % physical properties
     % dispersed phase
@@ -39,14 +41,14 @@ function [domain,param,fluid_prop,bubble] = read_input()
     read_line = regexp(fgetl(fid), '=', 'split');
     fluid_prop(1).mu = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
-    fluid_prop(1).surf = str2double(read_line{2});
+    fluid_prop(1).sigma = str2double(read_line{2});
     % continuous phase
     read_line = fgetl(fid);
     read_line = regexp(fgetl(fid), '=', 'split');
     fluid_prop(2).rho = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
     fluid_prop(2).mu = str2double(read_line{2});
-    fluid_prop(2).surf = fluid_prop(1).surf;
+    fluid_prop(2).sigma = fluid_prop(1).sigma;
     read_line = fgetl(fid);
     % bubble size and location
     read_line = fgetl(fid);    

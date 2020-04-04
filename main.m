@@ -7,11 +7,12 @@
 clear all;
 
 %% define variables
-param  = struct('nsteps',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
-domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'gravx',{},'gravy',{});
-fluid_prop  = struct('rho',{},'mu',{},'surf',{});
+param  = struct('nstep',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
+domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
+    'gravx',{},'gravy',{});
+fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
 bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
-    'x_old',{},'y_old',{},'u',{},'v',{},'tan_x',{},'tan_y',{});
+    'x_old',{},'y_old',{},'u',{},'v',{});
 face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
     'u_temp',{},'v_temp',{});
 center = struct('press',{},'force_x',{},'force_y',{},'u',{},'v',{}, ...
@@ -31,20 +32,14 @@ fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 [bubble] = initialize_front(bubble);
 
 %% start time-loop
-for is=1:nstep,is
-%     % store second order variables
-%     [bubble] = store_old_variables(bubble);
-%     u_old = u;
-%     v_old = u;
-%     rho_old = rho;
-%     mu_old = mu;
-%     bubble.x_old = bubble.x;
-%     bubble.y_old = bubble.y;
+for nstep=1:param.nstep,nstep
+
+    % store second order variables
+    [face, fluid, bubble] = store_old_variables(face, fluid, bubble);
+
     for substep=1:2  % second order loop
         % calculate the surface tension force at the front (lagrangian grid)
-
-        % distribute the surface tension force from lagrangian
-        % to eulerian grid
+        % and distribute it to eulerian grid
 
         % update the tangential velocity at boundaries
 
@@ -61,7 +56,7 @@ for is=1:nstep,is
         % distribute interfacial gradient
 
         % update physical properties
-  end
+    end
 % reconstruct the interface
 
 % plot the results
