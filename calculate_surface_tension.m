@@ -3,7 +3,7 @@
 function[center] = calculate_surface_tension(domain, bubble, fluid_prop)
     % initialize the force
     [center.force_x, center.force_y] = deal(zeros(domain.nx+2, domain.ny+2));
-    [tan_x, tan_y, force_x, force_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));  
+    [tan_x, tan_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));  
     % calculate the tangent vectors
     for i=1:bubble.pnt+1
         dist = sqrt((bubble.x(i+1)-bubble.x(i))^2 + ...
@@ -51,4 +51,12 @@ function[center] = calculate_surface_tension(domain, bubble, fluid_prop)
         center.force_y(cell_x+1,cell_y+1) = center.force_y(cell_x+1,cell_y+1) + ...
             coeff_x*coeff_y*force_y/domain.dy/domain.dx;
     end
+%     pcolor(center.force_x)
+%     axis square
+%     figure(1), clf
+%     pcolor(center.force_x)
+%     axis square
+%     figure(2), clf
+%     pcolor(center.force_y)
+%     axis square    
 end

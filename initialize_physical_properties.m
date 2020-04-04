@@ -17,5 +17,5 @@ function [fluid] = ...
           end
        end
     end
-    pcolor(fluid(1).rho);
+%     pcolor(fluid(1).rho);
 end

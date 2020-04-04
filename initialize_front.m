@@ -11,8 +11,8 @@ function [bubble] = initialize_front(bubble)
         bubble.y(i) = bubble.cent_y-bubble.rad*cos(2.0*pi*(i-1) ...
             /(bubble.pnt));
     end
-    plot(bubble.x,bubble.y);
-    axis square;
+%     plot(bubble.x,bubble.y);
+%     axis square;
 end
 
 
