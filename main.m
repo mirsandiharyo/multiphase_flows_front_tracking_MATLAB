@@ -1,8 +1,9 @@
 %% 
 % A two-dimensional gas-liquid multiphase flows using a front-tracking type
-% method. A set of Navier-Stokes equation is solved on an eulerian grid and 
-% the fluid properties are advected by a front-tracking (lagrangian) scheme. 
-% The code can be used to simulate a bubble rising in a rectangular box.
+% method. A set of Navier-Stokes equation is solved on a eulerian grid 
+% using a second order projection method. The fluid properties are advected 
+% by lagrangian marker points. The code can be used to simulate a bubble 
+% rising in a rectangular box.
 % Created by: Haryo Mirsandi
 clear all;
 
@@ -46,6 +47,8 @@ for nstep=1:param.nstep,nstep
         [face] = update_wall_velocities(domain,face);
         
         % calculate the (temporary) velocities
+        [face] = calculate_temporary_velocities(param,domain,fluid_prop, ...
+            fluid,center,face);
 
         % calculate source term and the coefficient for pressure field
 
