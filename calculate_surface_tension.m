@@ -20,30 +20,32 @@ function[center] = calculate_surface_tension(domain, bubble, fluid_prop)
         force_x = fluid_prop(1).sigma*(tan_x(i)-tan_x(i-1));
         % get the eulerian cell index
         cell_x = floor(bubble.x(i)/domain.dx)+1;
-        cell_y = floor(bubble.y(i)+0.5*domain.dx)+1;
+        cell_y = floor((bubble.y(i)+0.5*domain.dy)/domain.dy)+1;   
         % calculate the weighing coefficient 
         coeff_x = bubble.x(i)/domain.dx-cell_x+1;
-        coeff_y = (bubble.y(i)+0.5*domain.dy)/domain.dy-cell_y+1;
+        coeff_y = (bubble.y(i)+0.5*domain.dy)/domain.dy-cell_y+1;              
         % distribute the force to the surrounding eulerian cell   
         cell.force_x(cell_x,cell_y) = cell.force_x(cell_x,cell_y) + ...
             (1.0-coeff_x)*(1.0-coeff_y)*force_x/domain.dx/domain.dy;
         cell.force_x(cell_x+1,cell_y) = cell.force_x(cell_x+1,cell_y) + ...
             coeff_x*(1.0-coeff_y)*force_x/domain.dx/domain.dy;
         cell.force_x(cell_x,cell_y+1) = cell.force_x(cell_x,cell_y+1) + ... 
-            (1.0-coeff_x)*coeff_y*force_x/domain.dx/domain.dy;
+            (1.0-coeff_x)*coeff_y*force_x/domain.dx/domain.dy;      
         cell.force_x(cell_x+1,cell_y+1) = cell.force_x(cell_x+1,cell_y+1) + ...
             coeff_x*coeff_y*force_x/domain.dx/domain.dy;
         % force in y-direction
         force_y = fluid_prop(1).sigma*(tan_y(i)-tan_y(i-1));
         % get the eulerian cell index        
-        cell_x = floor((xf(l)+0.5*dx)/dx)+1; 
-        cell_y = floor(yf(l)/dy)+1;
-        coeff_x = (xf(l)+0.5*dx)/dx-cell_x+1; 
-        coeff_y = yf(l)/dy-cell_y+1;
+        cell_x = floor((bubble.x(i)+0.5*domain.dx)/domain.dx)+1; 
+        cell_y = floor(bubble.y(i)/domain.dy)+1;
+        % calculate the weighing coefficient         
+        coeff_x = (bubble.x(i)+0.5*domain.dx)/domain.dx-cell_x+1; 
+        coeff_y = bubble.y(i)/domain.dy-cell_y+1; 
+        % distribute the force to the surrounding eulerian cell           
         cell.force_y(cell_x,cell_y) = cell.force_y(cell_x,cell_y) + ...
             (1.0-coeff_x)*(1.0-coeff_y)*force_y/domain.dx/domain.dy;
         cell.force_y(cell_x+1,cell_y) = cell.force_y(cell_x+1,cell_y) + ...
-            coeff_x*(1.0-coeff_y)*force_y/domain.dx/domain.dy;
+            coeff_x*(1.0-coeff_y)*force_y/domain.dx/domain.dy;      
         cell.force_y(cell_x,cell_y+1) = cell.force_y(cell_x,cell_y+1) + ...
             (1.0-coeff_x)*coeff_y*force_y/domain.dx/domain.dy;
         cell.force_y(cell_x+1,cell_y+1) = cell.force_y(cell_x+1,cell_y+1) + ...
