@@ -34,7 +34,7 @@ fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
 %% start time-loop
 param.time = 0.0;
-for nstep=1:param.nstep,nstep
+for nstep=1:param.nstep
 
     % store second order variables
     [face, fluid, bubble] = store_old_variables(face, fluid, bubble);
@@ -63,6 +63,7 @@ for nstep=1:param.nstep,nstep
         % distribute interfacial gradient
 
         % update physical properties
+        [fluid] = update_viscosity(domain,fluid_prop,fluid);
     end
     % reconstruct the interface
 
