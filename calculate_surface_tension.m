@@ -1,6 +1,6 @@
 % calculate the surface tension force on the lagrangian grid and distribute
 % it to the eulerian grid
-function[center] = calculate_surface_tension(domain, bubble, fluid_prop)
+function[center] = calculate_surface_tension(domain, bubble, fluid_prop, center)
     % initialize the force
     [center.force_x, center.force_y] = deal(zeros(domain.nx+2, domain.ny+2));
     [tan_x, tan_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));  
