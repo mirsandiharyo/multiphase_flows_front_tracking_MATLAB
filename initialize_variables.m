@@ -15,6 +15,4 @@ function [face, center] = initialize_variables(domain)
     [center(1).pres, center(1).force_x, center(1).force_y, ...
         center(1).temp1, center(2).temp2] = ...
         deal(zeros(domain.nx+2, domain.ny+2));
-    % center velocities (for plotting)
-    [center(1).u, center(1).v] = deal(zeros(domain.nx+1, domain.ny+1));
 end
