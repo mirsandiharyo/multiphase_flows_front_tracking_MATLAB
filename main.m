@@ -5,7 +5,7 @@
 % by lagrangian marker points. The code can be used to simulate a bubble 
 % rising in a rectangular box.
 % Created by: Haryo Mirsandi
-clear all, clf;
+% clear all;
 
 %% define variables
 param  = struct('nstep',{},'time',{},'dt',{},'max_iter',{},'max_err',{}, ...
@@ -42,7 +42,8 @@ for nstep=1:param.nstep
     for substep=1:2  % second order loop
         % calculate the surface tension force at the front (lagrangian grid)
         % and distribute it to eulerian grid
-        [center] = calculate_surface_tension(domain, bubble, fluid_prop);
+        [center.force_x, center.force_y] = calculate_surface_tension ...
+            (domain, bubble, fluid_prop);
 
         % update the tangential velocity at boundaries
         [face] = update_wall_velocities(domain,face);
@@ -60,9 +61,8 @@ for nstep=1:param.nstep
 
         % update the front location
 
-        % distribute interfacial gradient
-
         % update physical properties
+        [fluid] = update_density(domain, param, fluid_prop, bubble, fluid);
         [fluid] = update_viscosity(domain,fluid_prop,fluid);
     end
     % reconstruct the interface
