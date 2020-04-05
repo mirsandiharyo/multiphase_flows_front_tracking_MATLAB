@@ -5,10 +5,11 @@
 % by lagrangian marker points. The code can be used to simulate a bubble 
 % rising in a rectangular box.
 % Created by: Haryo Mirsandi
-clear all;
+clear all, clf;
 
 %% define variables
-param  = struct('nstep',{},'dt',{},'max_iter',{},'max_err',{},'beta',{});
+param  = struct('nstep',{},'time',{},'dt',{},'max_iter',{},'max_err',{}, ...
+    'beta',{});
 domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
     'gravx',{},'gravy',{});
 fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
@@ -16,8 +17,7 @@ bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
     'x_old',{},'y_old',{},'u',{},'v',{});
 face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
     'u_temp',{},'v_temp',{});
-center = struct('press',{},'force_x',{},'force_y',{},'u',{},'v',{}, ...
-    'temp1',{},'temp2',{});
+center = struct('press',{},'force_x',{},'force_y',{},'temp1',{},'temp2',{});
 fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
 %% read input file
@@ -33,6 +33,7 @@ fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 [bubble] = initialize_front(bubble);
 
 %% start time-loop
+param.time = 0.0;
 for nstep=1:param.nstep,nstep
 
     % store second order variables
@@ -52,6 +53,7 @@ for nstep=1:param.nstep,nstep
 
         % calculate source term and the coefficient for pressure field
 
+        
         % solve pressure
 
         % update velocities to satisfy continuity equation
@@ -62,10 +64,11 @@ for nstep=1:param.nstep,nstep
 
         % update physical properties
     end
-% reconstruct the interface
+    % reconstruct the interface
 
-% plot the results
-
+    % visualize the results
+    param.time = param.time+param.dt;
+    visualize_results(domain, face, fluid, bubble, fluid_prop, param.time)
 %% end time-loop
 end
 disp('program finished');
