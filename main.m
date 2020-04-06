@@ -49,7 +49,7 @@ for nstep=1:param.nstep
         [face] = update_wall_velocities(domain,face);
         
         % calculate the (temporary) velocities
-        [face] = calculate_temporary_velocities(param,domain,fluid_prop, ...
+        [face] = calculate_temporary_velocity(param,domain,fluid_prop, ...
             fluid,center,face);
 
         % calculate source term and the coefficient for pressure field
