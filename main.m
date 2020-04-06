@@ -8,17 +8,17 @@
 % clear all;
 
 %% define variables
-param  = struct('nstep',{},'time',{},'dt',{},'max_iter',{},'max_err',{}, ...
-    'beta',{});
-domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
-    'gravx',{},'gravy',{});
-fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
-bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
-    'x_old',{},'y_old',{});
-face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
-    'u_temp',{},'v_temp',{});
-center = struct('press',{},'force_x',{},'force_y',{});
-fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
+% param  = struct('nstep',{},'time',{},'dt',{},'max_iter',{},'max_err',{}, ...
+%     'beta',{});
+% domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
+%     'gravx',{},'gravy',{});
+% fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
+% bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
+%     'x_old',{},'y_old',{});
+% face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
+%     'u_temp',{},'v_temp',{});
+% center = struct('press',{},'force_x',{},'force_y',{});
+% fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
 %% read input file
 [domain,param,fluid_prop,bubble] = read_input();
@@ -35,7 +35,6 @@ fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 %% start time-loop
 param.time = 0.0;
 for nstep=1:param.nstep
-
     % store second order variables
     [face, fluid, bubble] = store_old_variables(face, fluid, bubble);
 
@@ -47,13 +46,13 @@ for nstep=1:param.nstep
 
         % update the tangential velocity at boundaries
         [face] = update_wall_velocity(domain, face);
-        
+
         % calculate the (temporary) velocity
         [face] = calculate_temporary_velocity(param, domain, fluid_prop, ...
             fluid, center, face);
-        
+
         % solve pressure
-        [center.pres] = solve_pressure(domain, param, fluid, face);
+        [center] = solve_pressure(domain, param, fluid, face, center);
         
         % correct the velocity to satisfy continuity equation
         [face] = correct_velocity(domain, param, center, fluid, face);
@@ -63,16 +62,17 @@ for nstep=1:param.nstep
 
         % update physical properties
         [fluid] = update_density(domain, param, fluid_prop, bubble, fluid);
-        [fluid] = update_viscosity(domain, fluid_prop, fluid);
-        
-        % store second order variables
-        [face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
+        [fluid] = update_viscosity(domain, fluid_prop, fluid);  
     end
+    % store second order variables
+	[face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
+    
     % restructure the front
+    [bubble] = restructure_front(domain, bubble);
     
     % visualize the results
     param.time = param.time+param.dt;
     visualize_results(domain, face, fluid, bubble, fluid_prop, param.time)
-%% end time-loop
 end
+%% end time-loop
 disp('program finished');
