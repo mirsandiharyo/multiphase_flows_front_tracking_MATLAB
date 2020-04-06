@@ -46,7 +46,7 @@ for nstep=1:param.nstep
             (domain, bubble, fluid_prop);
 
         % update the tangential velocity at boundaries
-        [face] = update_wall_velocities(domain, face);
+        [face] = update_wall_velocity(domain, face);
         
         % calculate the (temporary) velocity
         [face] = calculate_temporary_velocity(param, domain, fluid_prop, ...
