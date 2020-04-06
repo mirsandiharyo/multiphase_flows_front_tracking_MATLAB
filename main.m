@@ -17,7 +17,7 @@ bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
     'x_old',{},'y_old',{});
 face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
     'u_temp',{},'v_temp',{});
-center = struct('press',{},'force_x',{},'force_y',{},'temp1',{},'temp2',{});
+center = struct('press',{},'force_x',{},'force_y',{});
 fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
 %% read input file
@@ -51,12 +51,10 @@ for nstep=1:param.nstep
         % calculate the (temporary) velocity
         [face] = calculate_temporary_velocity(param,domain,fluid_prop, ...
             fluid,center,face);
-
-        % calculate source term and the coefficient for pressure field
-
         
         % solve pressure
-
+        [center.pres] = solve_pressure(domain, param, fluid, face);
+        
         % correct the velocity to satisfy continuity equation
         [face] = correct_velocity(domain, param, center, fluid, face);
         
