@@ -46,11 +46,11 @@ for nstep=1:param.nstep
             (domain, bubble, fluid_prop);
 
         % update the tangential velocity at boundaries
-        [face] = update_wall_velocities(domain,face);
+        [face] = update_wall_velocities(domain, face);
         
         % calculate the (temporary) velocity
-        [face] = calculate_temporary_velocity(param,domain,fluid_prop, ...
-            fluid,center,face);
+        [face] = calculate_temporary_velocity(param, domain, fluid_prop, ...
+            fluid, center, face);
         
         % solve pressure
         [center.pres] = solve_pressure(domain, param, fluid, face);
@@ -63,10 +63,13 @@ for nstep=1:param.nstep
 
         % update physical properties
         [fluid] = update_density(domain, param, fluid_prop, bubble, fluid);
-        [fluid] = update_viscosity(domain,fluid_prop,fluid);
+        [fluid] = update_viscosity(domain, fluid_prop, fluid);
+        
+        % store second order variables
+        [face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
     end
-    % reconstruct the interface
-
+    % restructure the front
+    
     % visualize the results
     param.time = param.time+param.dt;
     visualize_results(domain, face, fluid, bubble, fluid_prop, param.time)
