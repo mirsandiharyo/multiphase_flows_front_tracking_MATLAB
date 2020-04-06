@@ -14,7 +14,7 @@ domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
     'gravx',{},'gravy',{});
 fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
 bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
-    'x_old',{},'y_old',{},'u',{},'v',{});
+    'x_old',{},'y_old',{});
 face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
     'u_temp',{},'v_temp',{});
 center = struct('press',{},'force_x',{},'force_y',{},'temp1',{},'temp2',{});
@@ -59,7 +59,8 @@ for nstep=1:param.nstep
 
         % update velocities to satisfy continuity equation
 
-        % update the front location
+        % update the front location 
+        [bubble] = update_front_location(param, domain, face, bubble);
 
         % update physical properties
         [fluid] = update_density(domain, param, fluid_prop, bubble, fluid);
