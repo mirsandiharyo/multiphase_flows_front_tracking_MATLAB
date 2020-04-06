@@ -48,7 +48,7 @@ for nstep=1:param.nstep
         % update the tangential velocity at boundaries
         [face] = update_wall_velocities(domain,face);
         
-        % calculate the (temporary) velocities
+        % calculate the (temporary) velocity
         [face] = calculate_temporary_velocity(param,domain,fluid_prop, ...
             fluid,center,face);
 
@@ -57,8 +57,9 @@ for nstep=1:param.nstep
         
         % solve pressure
 
-        % update velocities to satisfy continuity equation
-
+        % correct the velocity to satisfy continuity equation
+        [face] = correct_velocity(domain, param, center, fluid, face);
+        
         % update the front location 
         [bubble] = update_front_location(param, domain, face, bubble);
 
