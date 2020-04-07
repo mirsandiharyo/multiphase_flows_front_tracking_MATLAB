@@ -12,8 +12,8 @@ function [fluid] = ...
        for j=2:domain.ny+1
           if ((face.x(i)-bubble.cent_x)^2+(face.y(j)-bubble.cent_y)^2 ...
                   < bubble.rad^2)
-              fluid(1).rho(i,j)=fluid_prop(1).rho;
-              fluid(1).mu(i,j)=fluid_prop(1).mu;
+              fluid(1).rho(i,j) = fluid_prop(1).rho;
+              fluid(1).mu(i,j)  = fluid_prop(1).mu;
           end
        end
     end

@@ -5,23 +5,9 @@
 % by lagrangian marker points. The code can be used to simulate a bubble 
 % rising in a rectangular box.
 % Created by: Haryo Mirsandi
-% clear all;
-
-%% define variables
-% param  = struct('nstep',{},'time',{},'dt',{},'max_iter',{},'max_err',{}, ...
-%     'beta',{});
-% domain = struct('lx',{},'ly',{},'nx',{},'ny',{},'dx',{},'dy',{}, ...
-%     'gravx',{},'gravy',{});
-% fluid_prop  = struct('rho',{},'mu',{},'sigma',{});
-% bubble = struct('rad',{},'pnt',{},'cent_x','cent_y,{}','x',{},'y',{}, ...
-%     'x_old',{},'y_old',{});
-% face   = struct('x',{},'y',{},'u',{},'v',{},'u_old',{},'v_old',{}, ...
-%     'u_temp',{},'v_temp',{});
-% center = struct('press',{},'force_x',{},'force_y',{});
-% fluid  = struct('rho',{},'rho_old',{},'mu',{},'mu_old',{});
 
 %% read input file
-[domain,param,fluid_prop,bubble] = read_input();
+[domain, param, fluid_prop, bubble] = read_input();
 
 %% initialize variables (liquid is at rest at the beginning)
 [face, center] = initialize_variables(domain);
@@ -72,7 +58,9 @@ for nstep=1:param.nstep
     
     % visualize the results
     param.time = param.time+param.dt;
-    visualize_results(domain, face, fluid, bubble, fluid_prop, param.time)
+    if nstep == 1 || mod(nstep, param.out_freq) == 0
+        visualize_results(domain, face, fluid, bubble, fluid_prop, param.time);
+    end
 end
 %% end time-loop
 disp('program finished');

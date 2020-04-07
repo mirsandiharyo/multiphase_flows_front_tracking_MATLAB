@@ -15,6 +15,8 @@ function [domain,param,fluid_prop,bubble] = read_input()
     read_line = regexp(fgetl(fid), '=', 'split');
     param(1).beta = str2double(read_line{2});
     read_line = regexp(fgetl(fid), '=', 'split');
+    param(1).out_freq = str2double(read_line{2});
+    read_line = regexp(fgetl(fid), '=', 'split');    
     read_line = fgetl(fid);    
     % numerical parameters
     read_line = regexp(fgetl(fid), '=', 'split');
