@@ -1,5 +1,5 @@
 % calculate the surface tension force on the lagrangian grid and distribute
-% it to the eulerian grid
+% it to the surrounding eulerian grid cells
 function[center_x, center_y] = calculate_surface_tension(domain, bubble, ...
     fluid_prop)
     % initialize the force
@@ -19,37 +19,12 @@ function[center_x, center_y] = calculate_surface_tension(domain, bubble, ...
     for i=2:bubble.pnt+1
         % force in x-direction
         force_x = fluid_prop(1).sigma*(tan_x(i)-tan_x(i-1));
-        % get the eulerian cell index
-        cell_x = floor(bubble.x(i)/domain.dx)+1;
-        cell_y = floor((bubble.y(i)+0.5*domain.dy)/domain.dy)+1;   
-        % calculate the weighing coefficient 
-        coeff_x = bubble.x(i)/domain.dx-cell_x+1;
-        coeff_y = (bubble.y(i)+0.5*domain.dy)/domain.dy-cell_y+1;              
-        % distribute the force to the surrounding eulerian cell   
-        center_x(cell_x,cell_y) = center_x(cell_x,cell_y) + ...
-            (1.0-coeff_x)*(1.0-coeff_y)*force_x/domain.dx/domain.dy;
-        center_x(cell_x+1,cell_y) = center_x(cell_x+1,cell_y) + ...
-            coeff_x*(1.0-coeff_y)*force_x/domain.dx/domain.dy;
-        center_x(cell_x,cell_y+1) = center_x(cell_x,cell_y+1) + ... 
-            (1.0-coeff_x)*coeff_y*force_x/domain.dx/domain.dy;      
-        center_x(cell_x+1,cell_y+1) = center_x(cell_x+1,cell_y+1) + ...
-            coeff_x*coeff_y*force_x/domain.dx/domain.dy;
+        center_x = distribute_lagrangian_to_eulerian(domain, ...
+            center_x, bubble.x(i), bubble.y(i), force_x, 1);
+        
         % force in y-direction
         force_y = fluid_prop(1).sigma*(tan_y(i)-tan_y(i-1));
-        % get the eulerian cell index        
-        cell_x = floor((bubble.x(i)+0.5*domain.dx)/domain.dx)+1; 
-        cell_y = floor(bubble.y(i)/domain.dy)+1;
-        % calculate the weighing coefficient         
-        coeff_x = (bubble.x(i)+0.5*domain.dx)/domain.dx-cell_x+1; 
-        coeff_y = bubble.y(i)/domain.dy-cell_y+1; 
-        % distribute the force to the surrounding eulerian cell           
-        center_y(cell_x,cell_y) = center_y(cell_x,cell_y) + ...
-            (1.0-coeff_x)*(1.0-coeff_y)*force_y/domain.dy/domain.dx;
-        center_y(cell_x+1,cell_y) = center_y(cell_x+1,cell_y) + ...
-            coeff_x*(1.0-coeff_y)*force_y/domain.dy/domain.dx;      
-        center_y(cell_x,cell_y+1) = center_y(cell_x,cell_y+1) + ...
-            (1.0-coeff_x)*coeff_y*force_y/domain.dy/domain.dx;
-        center_y(cell_x+1,cell_y+1) = center_y(cell_x+1,cell_y+1) + ...
-            coeff_x*coeff_y*force_y/domain.dy/domain.dx;
+        center_y = distribute_lagrangian_to_eulerian(domain, ...
+            center_y, bubble.x(i), bubble.y(i), force_y, 2);
     end   
 end
