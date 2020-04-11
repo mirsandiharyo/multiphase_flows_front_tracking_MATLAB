@@ -6,20 +6,25 @@
 % rising in a rectangular box.
 % Created by: Haryo Mirsandi
 
-%% read input file
+%% initialization
+% read input file
 [domain, param, fluid_prop, bubble] = read_input();
 
-%% initialize variables (liquid is at rest at the beginning)
+% initialize variables (liquid is at rest at the beginning)
 [face, center] = initialize_variables(domain);
 
-%% initialize the physical properties
+% initialize the physical properties
 [fluid] = initialize_physical_properties(domain, face, fluid_prop, bubble);
 
-%% set the front (gas-liquid interface)
+% set the initial front (gas-liquid interface)
 [bubble] = initialize_front(bubble);
 
 %% start time-loop
 param.time = 0.0;
+
+% visualize the initial condition
+visualize_results(domain, face, fluid, bubble, fluid_prop, param.time, 0);
+
 for nstep=1:param.nstep
     % store second order variables
     [face, fluid, bubble] = store_old_variables(face, fluid, bubble);
@@ -58,8 +63,9 @@ for nstep=1:param.nstep
     
     % visualize the results
     param.time = param.time+param.dt;
-    if nstep == 1 || mod(nstep, param.out_freq) == 0
-        visualize_results(domain, face, fluid, bubble, fluid_prop, param.time);
+    if mod(nstep, param.out_freq) == 0
+        visualize_results(domain, face, fluid, bubble, fluid_prop, ...
+            param.time, nstep);
     end
 end
 %% end time-loop

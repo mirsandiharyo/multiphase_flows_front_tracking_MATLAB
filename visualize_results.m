@@ -1,6 +1,7 @@
 % visualize the phase fraction field, velocity vector, velocity contour and
 % marker points
-function[]=visualize_results(domain, face, fluid, bubble, fluid_prop, time)
+function[]=visualize_results(domain, face, fluid, bubble, fluid_prop, ...
+    time, nstep)
     % calculate velocity at cell center 
     u_center(1:domain.nx+1,1:domain.ny+1) = 0.5* ...
         (face.u(1:domain.nx+1,2:domain.ny+2)+ ...
@@ -31,9 +32,12 @@ function[]=visualize_results(domain, face, fluid, bubble, fluid_prop, time)
     % plot velocity vector    
     quiver(grid_x,grid_y,flipud(rot90(u_center)),flipud(rot90(v_center)),'w');
     % plot the marker points
-    plot(bubble.x(1:bubble.pnt),bubble.y(1:bubble.pnt),'k','linewidth',2);
+    h = plot(bubble.x(1:bubble.pnt),bubble.y(1:bubble.pnt),'k','linewidth',2);
     % set title
-    caption = sprintf('Time = %f', time);
+    caption = sprintf('Time = %f s', time);
 	title(caption, 'FontSize', 10);     
     pause(0.001)
+    % save the plot     
+    caption = sprintf('output/bub_%03d.png',nstep);
+    saveas(h, caption);
 end
