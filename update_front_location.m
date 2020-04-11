@@ -5,31 +5,14 @@ function[bubble] = update_front_location(param, domain, face, bubble)
     % marker point   
     [u_x, u_y] = deal(zeros(1,bubble.pnt+2));
     for i=2:bubble.pnt+1
-        % marker location in x direction
-        % get the eulerian cell index
-        cell_x = floor(bubble.x(i)/domain.dx)+1;
-        cell_y = floor((bubble.y(i)+0.5*domain.dy)/domain.dy)+1;
-        % calculate the weighing coefficient
-        coeff_x = bubble.x(i)/domain.dx-cell_x+1;
-        coeff_y = (bubble.y(i)+0.5*domain.dy)/domain.dy-cell_y+1;
-        % interpolate the velocity
-        u_x(i) = (1.0-coeff_x)*(1.0-coeff_y)*face.u(cell_x  ,cell_y  )+ ...
-                      coeff_x *(1.0-coeff_y)*face.u(cell_x+1,cell_y  )+ ...
-                 (1.0-coeff_x)*     coeff_y *face.u(cell_x  ,cell_y+1)+ ...
-                      coeff_x *     coeff_y *face.u(cell_x+1,cell_y+1);
-        % marker location in y direction
-        % get the eulerian cell index        
-        cell_x = floor((bubble.x(i)+0.5*domain.dx)/domain.dx)+1; 
-        cell_y = floor(bubble.y(i)/domain.dy)+1;
-        % calculate the weighing coefficient        
-        coeff_x = (bubble.x(i)+0.5*domain.dx)/domain.dx-cell_x+1;
-        coeff_y = bubble.y(i)/domain.dy-cell_y+1;
-        % interpolate the velocity        
-        u_y(i) = (1.0-coeff_x)*(1.0-coeff_y)*face.v(cell_x  ,cell_y  )+ ...
-                      coeff_x *(1.0-coeff_y)*face.v(cell_x+1,cell_y  )+ ...
-                 (1.0-coeff_x)*     coeff_y *face.v(cell_x  ,cell_y+1)+ ...
-                      coeff_x *     coeff_y *face.v(cell_x+1,cell_y+1);
+        % interpolate velocity in x-direction
+        u_x(i) = interpolate_velocity(domain, face.u, bubble.x(i), ...
+            bubble.y(i), 1);
+        % interpolate velocity in y-direction
+        u_y(i) = interpolate_velocity(domain, face.v, bubble.x(i), ...
+            bubble.y(i), 2);
     end
+    
 	% advect the marker point 
 	for i=2:bubble.pnt+1
         bubble.x(i) = bubble.x(i)+param.dt*u_x(i);
