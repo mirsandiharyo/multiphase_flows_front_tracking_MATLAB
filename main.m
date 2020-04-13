@@ -7,10 +7,14 @@
 % Created by: Haryo Mirsandi
 
 %% initialization
+% clean output folder
+mkdir output;
+delete output/bub_*;
+
 % read input file
 [domain, param, fluid_prop, bubble] = read_input();
 
-% initialize variables (liquid is at rest at the beginning)
+% initialize variables (grid, velocity, pressure, and force)
 [face, center] = initialize_variables(domain);
 
 % initialize the physical properties
@@ -52,8 +56,9 @@ for nstep=1:param.nstep
         [bubble] = update_front_location(param, domain, face, bubble);
 
         % update physical properties
-        [fluid] = update_density(domain, param, fluid_prop, bubble, fluid);
-        [fluid] = update_viscosity(domain, fluid_prop, fluid);  
+        [fluid.rho] = update_density(domain, param, fluid_prop, bubble, ...
+            fluid.rho);
+        [fluid.mu] = update_viscosity(fluid_prop, fluid.rho);  
     end
     % store second order variables
 	[face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);

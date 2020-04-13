@@ -1,11 +1,8 @@
 % update the viscosity field using harmonic averaging
-function[fluid] = update_viscosity(domain,fluid_prop,fluid)
-    % reinitialize viscosity field
-    fluid.mu = zeros(domain.nx+2,domain.ny+2);
+function[mu] = update_viscosity(fluid_prop, rho)
     % update viscosity
-    fluid.mu = bsxfun(@minus,fluid.rho,fluid_prop(2).rho);
-    fluid.mu = bsxfun(@times,fluid.mu, ...
-        (fluid_prop(1).mu-fluid_prop(2).mu)/ ...
+    mu = bsxfun(@minus,rho,fluid_prop(2).rho);
+    mu = bsxfun(@times,mu,(fluid_prop(1).mu-fluid_prop(2).mu)/ ...
         (fluid_prop(1).rho-fluid_prop(2).rho));
-    fluid.mu = bsxfun(@plus,fluid.mu, fluid_prop(2).mu);  
+    mu = bsxfun(@plus,mu,fluid_prop(2).mu);  
 end
