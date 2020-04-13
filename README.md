@@ -1,10 +1,18 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
+### Project title ###
 
 * 2D gas-liquid multiphase flows using Front-Tracking type method
+
+* The code is written in MATLAB
+
+### Running simulations ###
+
+* Run the main.m file
+
+* Change the simulation parameters in input.txt
+
+* Results are stored in output folder
 
 ### Structure of the repository
 
