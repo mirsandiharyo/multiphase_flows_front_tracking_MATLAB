@@ -5,7 +5,7 @@ function[center_x, center_y] = calculate_surface_tension(domain, bubble, ...
     % initialize the force
     [center_x, center_y] = deal(zeros(domain.nx+2, domain.ny+2));
     [tan_x, tan_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));  
-    % calculate the tangent vectors
+    % calculate the tangent vector
     for i=1:bubble.pnt+1
         dist = sqrt((bubble.x(i+1)-bubble.x(i))^2 + ...
             (bubble.y(i+1)-bubble.y(i))^2);

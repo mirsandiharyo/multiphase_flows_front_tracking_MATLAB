@@ -23,6 +23,7 @@ function[center] = solve_pressure(domain, param, fluid, face, ...
                  1./(domain.dy*(rho_temp(i  ,j-1)+rho_temp(i,j)))));
         end
     end
+    
     % solve the pressure
     for it=1:param.max_iter
         old_pres = center.pres;

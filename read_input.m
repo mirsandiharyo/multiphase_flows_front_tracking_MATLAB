@@ -1,5 +1,5 @@
 % read simulation parameters from input.txt 
-function [domain,param,fluid_prop,bubble] = read_input()
+function [domain, param, fluid_prop, bubble] = read_input()
     disp('read input file');
     fid = fopen('input.txt');
     % solver parameters

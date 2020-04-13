@@ -7,6 +7,7 @@ function [fluid] = ...
         deal(zeros(domain.nx+2, domain.ny+2)+fluid_prop(2).rho);
     [fluid(1).mu, fluid(1).mu_old] =  ...
         deal(zeros(domain.nx+2, domain.ny+2)+fluid_prop(2).mu);
+    
     % set the physical properties inside the discrete phase (bubble)
     for i=2:domain.nx+1
        for j=2:domain.ny+1

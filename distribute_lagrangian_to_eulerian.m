@@ -12,6 +12,7 @@ function[cell] = distribute_lagrangian_to_eulerian(domain, cell, loc_x, ...
         d1 = domain.dx;
         d2 = domain.dy;
     elseif dir==2 % distribution in y-dir
+     	% get the eulerian cell index        
         index_x = floor((loc_x+0.5*domain.dx)/domain.dx)+1; 
         index_y = floor(loc_y/domain.dy)+1;
         % calculate the weighing coefficient         
