@@ -19,7 +19,7 @@ delete output/bub_*;
 [face, center] = initialize_variables(domain);
 
 % initialize the physical properties
-[fluid] = initialize_physical_properties(domain, face, fluid_prop, bubble);
+[fluid] = initialize_physical_properties(domain, center, fluid_prop, bubble);
 
 % set the initial front (gas-liquid interface)
 [bubble] = initialize_front(bubble);
@@ -28,7 +28,8 @@ delete output/bub_*;
 param.time = 0.0;
 
 % visualize the initial condition
-visualize_results(domain, face, fluid, bubble, fluid_prop, param.time, 0);
+visualize_results(domain, face, center, fluid, bubble, fluid_prop, ...
+    param.time, 0);
 
 for nstep=1:param.nstep
     % store second order variables
@@ -71,7 +72,7 @@ for nstep=1:param.nstep
     % visualize the results
     param.time = param.time+param.dt;
     if mod(nstep, param.out_freq) == 0
-        visualize_results(domain, face, fluid, bubble, fluid_prop, ...
+        visualize_results(domain, face, center, fluid, bubble, fluid_prop, ...
             param.time, nstep);
     end
 end

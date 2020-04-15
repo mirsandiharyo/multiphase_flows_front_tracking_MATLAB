@@ -1,6 +1,6 @@
 % initialize physical properties 
 function [fluid] = ...
-    initialize_physical_properties(domain, face, fluid_prop, bubble)
+    initialize_physical_properties(domain, center, fluid_prop, bubble)
     % initialize the density and viscosity using values from the 
     % continuous phase
     [fluid(1).rho, fluid(1).rho_old] = ...
@@ -12,7 +12,7 @@ function [fluid] = ...
     % an initial spherical shape
     for i=2:domain.nx+1
        for j=2:domain.ny+1
-          if ((face.x(i)-bubble.cent_x)^2+(face.y(j)-bubble.cent_y)^2 ...
+          if ((center.x(i)-bubble.cent_x)^2+(center.y(j)-bubble.cent_y)^2 ...
                   < bubble.rad^2)
               fluid(1).rho(i,j) = fluid_prop(1).rho;
               fluid(1).mu(i,j)  = fluid_prop(1).mu;
