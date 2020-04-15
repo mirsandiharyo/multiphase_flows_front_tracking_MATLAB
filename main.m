@@ -2,7 +2,8 @@
 % A two-dimensional gas-liquid multiphase flows using a front-tracking type
 % method. A set of Navier-Stokes equation is solved on a eulerian grid 
 % using a second order projection method. The fluid properties are advected 
-% by lagrangian marker points. The code can be used to simulate a bubble 
+% by lagrangian marker points. The time marching is second order by using 
+% predictor-corrector method. The code can be used to simulate a bubble 
 % rising in a rectangular box.
 % Created by: Haryo Mirsandi
 
@@ -44,12 +45,13 @@ for nstep=1:param.nstep
 
         % calculate the (temporary) velocity
         [face] = calculate_temporary_velocity(param, domain, fluid_prop, ...
-            fluid, center, face);
+            fluid, face);
 
         % solve pressure
-        [center] = solve_pressure(domain, param, fluid, face, center);
+        [center.pres] = solve_pressure(domain, param, fluid, face, ...
+            center.pres);
         
-        % correct the velocity to satisfy continuity equation
+        % correct the velocity by adding the pressure gradient
         [face] = correct_velocity(domain, param, center, fluid, face);
         
         % update the front location 
