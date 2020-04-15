@@ -1,29 +1,21 @@
 % distribute a value from a lagrangian point to neighboring eulerian cells
-function[cell] = distribute_lagrangian_to_eulerian(domain, cell, loc_x, ...
-    loc_y, value, dir)
-    if dir==1  % distribution in x-dir
-     	% get the eulerian cell index
-        index_x = floor(loc_x/domain.dx)+1;
-        index_y = floor((loc_y+0.5*domain.dy)/domain.dy)+1;        
-        % calculate the weighing coefficient 
-        coeff_x = loc_x/domain.dx-index_x+1;
-        coeff_y = (loc_y+0.5*domain.dy)/domain.dy-index_y+1;
-        % assign the grid size
-        d1 = domain.dx;
-        d2 = domain.dy;
-    elseif dir==2 % distribution in y-dir
-     	% get the eulerian cell index        
-        index_x = floor((loc_x+0.5*domain.dx)/domain.dx)+1; 
-        index_y = floor(loc_y/domain.dy)+1;
-        % calculate the weighing coefficient         
-        coeff_x = (loc_x+0.5*domain.dx)/domain.dx-index_x+1; 
-        coeff_y = loc_y/domain.dy-index_y+1;   
-        % assign the grid size
-        d1 = domain.dy;
-        d2 = domain.dx;
-    else
-        error("direction error inside distribute_lagrangian_to_eulerian");
+function[cell] = distribute_lagrangian_to_eulerian(domain, cell, x, y, value, dir)
+	% assign the grid size
+    switch dir
+        case 1 % x-dir
+            d1 = domain.dx;
+            d2 = domain.dy;    
+        case 2 % y-dir
+            d1 = domain.dy;
+            d2 = domain.dx;   
+        otherwise
+            error("direction error inside distribute_lagrangian_to_eulerian");
     end
+	% get the eulerian cell indices
+    [index_x, index_y] = get_cell_index(x, y, domain.dx, domain.dy, dir); 
+	% calculate the weighing coefficients
+    [coeff_x, coeff_y] = get_weight_coeff(x, y, domain.dx, domain.dy, ...
+        index_x, index_y, dir); 
   
     % distribute the force to the surrounding eulerian cells
     cell(index_x  ,index_y  ) = cell(index_x  ,index_y  ) + ...
