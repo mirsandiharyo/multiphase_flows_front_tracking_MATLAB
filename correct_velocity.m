@@ -1,4 +1,4 @@
-% correct the velocity to satisfy continuity equation
+% correct the velocity by adding the pressure gradient
 function[face] = correct_velocity(domain, param, center, fluid, face)
     % correct velocity in x-direction
     for i=2:domain.nx

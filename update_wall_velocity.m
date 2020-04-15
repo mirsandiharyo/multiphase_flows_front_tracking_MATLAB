@@ -1,5 +1,5 @@
 % update the tangential velocity at boundaries
-function[face] = update_wall_velocity(domain,face)
+function[face] = update_wall_velocity(domain, face)
     % the domain is currently assumed as a box with no-slip boundary
     % condition
     u_south = 0;
