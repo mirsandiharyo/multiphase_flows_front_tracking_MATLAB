@@ -36,7 +36,7 @@ for nstep=1:param.nstep
     for substep=1:2  % second order loop
         % calculate the surface tension force at the front (lagrangian grid)
         % and distribute it to eulerian grid
-        [center.force_x, center.force_y] = calculate_surface_tension ...
+        [face.force_x, face.force_y] = calculate_surface_tension ...
             (domain, bubble, fluid_prop);
 
         % update the tangential velocity at boundaries
