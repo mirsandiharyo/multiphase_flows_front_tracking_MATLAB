@@ -2,9 +2,9 @@
 % it to the surrounding eulerian grid cells
 function[face_x, face_y] = calculate_surface_tension(domain, bubble, ...
     fluid_prop)
-    % initialize the force
+    % initialize the variables to store the force and tangent vector
     [face_x, face_y] = deal(zeros(domain.nx+2, domain.ny+2));
-    [tan_x, tan_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));  
+    [tan_x, tan_y] = deal(zeros(bubble.pnt+2, bubble.pnt+2));
     % calculate the tangent vector
     for i=1:bubble.pnt+1
         dist = sqrt((bubble.x(i+1)-bubble.x(i))^2 + ...

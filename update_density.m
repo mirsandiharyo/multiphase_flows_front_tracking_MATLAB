@@ -1,7 +1,7 @@
 % update the density field using the density jump at the lagrangian
 % interface
 function[rho] = update_density(domain, param, fluid_prop, bubble, rho)
-    % initialize the force
+    % initialize the variables to store the density jump
     [face_x, face_y] = deal(zeros(domain.nx+2, domain.ny+2));
     % distribute the density jump to the eulerian grid
     for i=2:bubble.pnt+1
@@ -18,7 +18,7 @@ function[rho] = update_density(domain, param, fluid_prop, bubble, rho)
             face_y, bubble.x(i), bubble.y(i), force_y, 2);
     end
     
-    % construct the density field
+    % construct the density field using SOR
     for iter=1:param.max_iter
         old_rho = rho;
         for i=2:domain.nx+1
