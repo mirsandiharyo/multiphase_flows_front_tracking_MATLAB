@@ -12,11 +12,13 @@ function [fluid] = ...
     % an initial spherical shape
     for i=2:domain.nx+1
        for j=2:domain.ny+1
-          if ((center.x(i)-bubble.cent_x)^2+(center.y(j)-bubble.cent_y)^2 ...
-                  < bubble.rad^2)
-              fluid(1).rho(i,j) = fluid_prop(1).rho;
-              fluid(1).mu(i,j)  = fluid_prop(1).mu;
-          end
+           for n=1:domain.nbub
+              if ((center.x(i)-bubble(n).cent_x)^2+ ...
+                  (center.y(j)-bubble(n).cent_y)^2 < bubble(n).rad^2)
+                  fluid(1).rho(i,j) = fluid_prop(1).rho;
+                  fluid(1).mu(i,j)  = fluid_prop(1).mu;
+              end
+           end
        end
     end
 end

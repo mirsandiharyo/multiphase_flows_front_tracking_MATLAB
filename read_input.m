@@ -53,14 +53,18 @@ function [domain, param, fluid_prop, bubble] = read_input()
     fluid_prop(2).sigma = fluid_prop(1).sigma;
     read_line = fgetl(fid);
     % bubble size and location
-    read_line = fgetl(fid);    
+    read_line = fgetl(fid);
     read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).rad = str2double(read_line{2});
-    read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).cent_x = str2double(read_line{2});
-    read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).cent_y = str2double(read_line{2});
-    read_line = regexp(fgetl(fid), '=', 'split');
-    bubble(1).pnt = str2double(read_line{2});    
+    domain(1).nbub = str2double(read_line{2});
+    for i=1:domain.nbub
+        read_line = regexp(fgetl(fid), '=', 'split');
+        bubble(i).rad = str2double(read_line{2});
+        read_line = regexp(fgetl(fid), '=', 'split');
+        bubble(i).cent_x = str2double(read_line{2});
+        read_line = regexp(fgetl(fid), '=', 'split');
+        bubble(i).cent_y = str2double(read_line{2});
+        read_line = regexp(fgetl(fid), '=', 'split');
+        bubble(i).pnt = str2double(read_line{2});
+    end
     fclose(fid);
 end

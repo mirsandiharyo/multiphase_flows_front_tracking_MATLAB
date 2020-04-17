@@ -22,7 +22,7 @@ delete output/bub_*;
 [fluid] = initialize_physical_properties(domain, center, fluid_prop, bubble);
 
 % set the initial front (gas-liquid interface)
-[bubble] = initialize_front(bubble);
+[bubble] = initialize_front(domain, bubble);
 
 %% start time-loop
 param.time = 0.0;
@@ -33,14 +33,17 @@ visualize_results(domain, face, center, fluid, bubble, fluid_prop, ...
 
 for nstep=1:param.nstep
     % store second order variables
-    [face, fluid, bubble] = store_old_variables(face, fluid, bubble);
+    [face, fluid, bubble] = store_old_variables(domain, face, fluid, bubble);
 
     for substep=1:2  % second order loop
         % calculate the surface tension force at the front (lagrangian grid)
         % and distribute it to eulerian grid
-        [face.force_x, face.force_y] = calculate_surface_tension ...
-            (domain, bubble, fluid_prop);
-
+        [face.force_x, face.force_y] = deal(zeros(domain.nx+2, domain.ny+2));
+        for n=1:domain.nbub
+            [face] = calculate_surface_tension(domain, bubble(n), ...
+                fluid_prop, face);
+        end
+        
         % update the tangential velocity at boundaries
         [face] = update_wall_velocity(domain, face);
 
@@ -55,19 +58,24 @@ for nstep=1:param.nstep
         % correct the velocity by adding the pressure gradient
         [face] = correct_velocity(domain, param, center, fluid, face);
         
-        % update the front location 
-        [bubble] = update_front_location(param, domain, face, bubble);
-
+        % update the front location
+        for n=1:domain.nbub
+            [bubble(n)] = update_front_location(param, domain, face, bubble(n));
+        end
+        
         % update physical properties
         [fluid.rho] = update_density(domain, param, fluid_prop, bubble, ...
             fluid.rho);
         [fluid.mu] = update_viscosity(fluid_prop, fluid.rho);  
     end
     % store second order variables
-	[face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
+	[face, fluid, bubble] = store_2nd_order_variables(domain, face, fluid, ...
+        bubble);
     
     % restructure the front
-    [bubble] = restructure_front(domain, bubble);
+    for n=1:domain.nbub
+        [bubble(n)] = restructure_front(domain, bubble(n));
+    end
     
     % visualize the results
     param.time = param.time+param.dt;
