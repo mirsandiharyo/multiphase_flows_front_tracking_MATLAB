@@ -64,7 +64,7 @@ for nstep=1:param.nstep
         [fluid.mu] = update_viscosity(fluid_prop, fluid.rho);  
     end
     % store second order variables
-	[face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
+    [face, fluid, bubble] = store_2nd_order_variables(face, fluid, bubble);
     
     % restructure the front
     [bubble] = restructure_front(domain, bubble);
