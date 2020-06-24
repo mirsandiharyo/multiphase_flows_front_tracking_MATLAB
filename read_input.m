@@ -1,7 +1,11 @@
 % read simulation parameters from input.txt 
 function [domain, param, fluid_prop, bubble] = read_input()
-    disp('read input file');
-    fid = fopen('input.txt');
+    disp('choose the input file (.txt)');
+    [input_name, file_path] = uigetfile('.txt');
+    origin_path = pwd;
+    cd(file_path);
+    fid = fopen(input_name);
+    cd(origin_path);
     % solver parameters
     read_line = fgetl(fid); %#ok<*NASGU>
     read_line = regexp(fgetl(fid), '=', 'split');
