@@ -4,20 +4,21 @@ function[rho] = update_density(domain, param, fluid_prop, bubble, rho)
     % initialize the variables to store the density jump
     [face_x, face_y] = deal(zeros(domain.nx+2, domain.ny+2));
     % distribute the density jump to the eulerian grid
-    for i=2:bubble.pnt+1
-        % density jump in x-direction
-        force_x = -0.5*(bubble.y(i+1)-bubble.y(i-1))* ...
-            (fluid_prop(1).rho-fluid_prop(2).rho);  
-        face_x = distribute_lagrangian_to_eulerian(domain, ...
-            face_x, bubble.x(i), bubble.y(i), force_x, 1);
-        
-        % density jump in y-direction
-        force_y = 0.5*(bubble.x(i+1)-bubble.x(i-1))* ...
-            (fluid_prop(1).rho-fluid_prop(2).rho); 
-        face_y = distribute_lagrangian_to_eulerian(domain, ...
-            face_y, bubble.x(i), bubble.y(i), force_y, 2);
+    for n=1:domain.nbub
+        for i=2:bubble(n).pnt+1
+            % density jump in x-direction
+            force_x = -0.5*(bubble(n).y(i+1)-bubble(n).y(i-1))* ...
+                (fluid_prop(1).rho-fluid_prop(2).rho);  
+            face_x = distribute_lagrangian_to_eulerian(domain, ...
+                face_x, bubble(n).x(i), bubble(n).y(i), force_x, 1);
+
+            % density jump in y-direction
+            force_y = 0.5*(bubble(n).x(i+1)-bubble(n).x(i-1))* ...
+                (fluid_prop(1).rho-fluid_prop(2).rho); 
+            face_y = distribute_lagrangian_to_eulerian(domain, ...
+                face_y, bubble(n).x(i), bubble(n).y(i), force_y, 2);
+        end
     end
-    
     % construct the density field using SOR
     for iter=1:param.max_iter
         old_rho = rho;

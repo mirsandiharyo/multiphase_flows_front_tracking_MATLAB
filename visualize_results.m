@@ -32,7 +32,10 @@ function[] = visualize_results(domain, face, center, fluid, bubble, ...
     % plot velocity vector    
     quiver(grid_x,grid_y,flipud(rot90(u_center)),flipud(rot90(v_center)),'w');
     % plot the marker points
-    h = plot(bubble.x(1:bubble.pnt),bubble.y(1:bubble.pnt),'k','linewidth',2);
+    for n=1:domain.nbub
+        h = plot(bubble(n).x(1:bubble(n).pnt),bubble(n).y(1:bubble(n).pnt), ...
+            'k','linewidth',2);
+    end
     % set title
     caption = sprintf('Time = %f s', time);
 	title(caption, 'FontSize', 10);     
